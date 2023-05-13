@@ -1,0 +1,4 @@
+gymnasium==0.28.1
+stable-baselines3==2.0.0a5
+mujoco=2.3.3
+pytorch==2.0.0
