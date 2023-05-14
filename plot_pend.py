@@ -15,7 +15,6 @@ ax.fill_between(steps, np.min(returns_TD3_v4, axis=0), np.max(returns_TD3_v4, ax
 ax.fill_between(steps, np.min(returns_TD3_v5, axis=0), np.max(returns_TD3_v5, axis=0), alpha=0.2)
 
 ax.set_title('TD3 on MuJoCo/InvertedPendulum, for ' + str(RUNS) + ' Runs')
-#ax.set_title('TD3 on MuJoCo/InvertedDoublePendulum, for ' + str(RUNS) + ' Runs')
 ax.legend()
 
 fig.set_figwidth(16)
@@ -23,8 +22,6 @@ fig.set_figheight(9)
 
 plt.savefig("figures/TD3_InvertedPendulum" + ".eps", bbox_inches="tight")
 plt.savefig("figures/TD3_InvertedPendulum" + ".png", bbox_inches="tight")
-#plt.savefig("figures/TD3_InvertedDoublePendulum" + ".eps", bbox_inches="tight")
-#plt.savefig("figures/TD3_InvertedDoublePendulum" + ".png", bbox_inches="tight")
 
 fig.show()
 breakpoint()
