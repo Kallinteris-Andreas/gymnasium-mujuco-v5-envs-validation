@@ -170,6 +170,7 @@ class InvertedDoublePendulumEnv(MujocoEnv, utils.EzPickle):
 
     def _get_obs(self):
         assert self.data.qfrc_constraint[2] == 0  # TODO remove after validation
+        assert self.data.qfrc_constraint[1] == 0  # TODO remove after validation
         return np.concatenate(
             [
                 self.data.qpos[:1],  # cart x pos

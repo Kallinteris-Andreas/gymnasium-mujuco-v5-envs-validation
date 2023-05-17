@@ -19,8 +19,8 @@ for run in range(0, RUNS):
     #eval_env = gym.wrappers.TimeLimit(ant_v4_fixed.AntEnv(use_contact_forces=True), max_episode_steps=1000)
     #env = gym.wrappers.TimeLimit(ant_v4_fixed.AntEnv(use_contact_forces=False), max_episode_steps=1000)
     #eval_env = gym.wrappers.TimeLimit(ant_v4_fixed.AntEnv(use_contact_forces=False), max_episode_steps=1000)
-    env = gym.wrappers.TimeLimit(ant_v5.AntEnv(use_contact_forces=False), max_episode_steps=1000)
-    eval_env = gym.wrappers.TimeLimit(ant_v5.AntEnv(use_contact_forces=False), max_episode_steps=1000)
+    env = gym.wrappers.TimeLimit(ant_v5.AntEnv(use_contact_forces=True), max_episode_steps=1000)
+    eval_env = gym.wrappers.TimeLimit(ant_v5.AntEnv(use_contact_forces=True), max_episode_steps=1000)
 
     #eval_path = 'results/ant_v4_fixed_with_ctn_TD3/run_' + str(run)
     #eval_path = 'results/ant_v4_fixed_without_ctn_TD3/run_' + str(run)

@@ -29,7 +29,7 @@ class ReacherEnv(MujocoEnv, utils.EzPickle):
     - The angular velocities of the arms
     - The vector between the target and the reacher's fingertip (3 dimensional with the last element being 0)
 
-    The observation is a `Box(-Inf, Inf, (11,), float64)` where the elements correspond to the following:
+    The observation is a `Box(-Inf, Inf, (10,), float64)` where the elements correspond to the following:
 
     | Num | Observation                                                                                    | Min  | Max | Name (in corresponding XML file) | Joint | Unit                     |
     | --- | ---------------------------------------------------------------------------------------------- | ---- | --- | -------------------------------- | ----- | ------------------------ |
@@ -43,7 +43,7 @@ class ReacherEnv(MujocoEnv, utils.EzPickle):
     | 7   | angular velocity of the second arm                                                             | -Inf | Inf | joint1                           | hinge | angular velocity (rad/s) |
     | 8   | x-value of position_fingertip - position_target                                                | -Inf | Inf | NA                               | slide | position (m)             |
     | 9   | y-value of position_fingertip - position_target                                                | -Inf | Inf | NA                               | slide | position (m)             |
-    | 10  | z-value of position_fingertip - position_target (constantly 0 since reacher is 2d and z is same for both) | -Inf | Inf | NA                               | slide | position (m)             |
+    | excluded | z-value of position_fingertip - position_target (constantly 0 since reacher is 2d and z is same for both) | -Inf | Inf | NA                               | slide | position (m)             |
 
 
     Most Gym environments just return the positions and velocity of the
