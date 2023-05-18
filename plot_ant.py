@@ -8,7 +8,7 @@ returns_TD3_v4_w_ctn = np.average(np.array([np.load('results/ant_v4_fixed_with_c
 returns_TD3_v4_wo_ctn = np.average(np.array([np.load('results/ant_v4_fixed_without_ctn_TD3/run_' + str(run) + '/evaluations.npz')['results'] for run in range(RUNS)]), axis=2)
 returns_TD3_v5_w_ctn = np.average(np.array([np.load('results/ant_v5_TD3/run_' + str(run) + '/evaluations.npz')['results'] for run in range(RUNS)]), axis=2)
 
-# breakpoint()
+breakpoint()
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
