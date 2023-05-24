@@ -377,7 +377,7 @@ class HumanoidEnv(MujocoEnv, utils.EzPickle):
         self._contact_cost_weight = 5e-7
         self._contact_cost_range = (-np.inf, 10.0)
 
-        contact_forces = self.sim.data.cfrc_ext
+        contact_forces = self.data.cfrc_ext
         contact_cost = self._contact_cost_weight * np.sum(np.square(contact_forces))
         min_cost, max_cost = self._contact_cost_range
         contact_cost = np.clip(contact_cost, min_cost, max_cost)

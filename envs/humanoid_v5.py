@@ -227,18 +227,11 @@ class HumanoidEnv(MujocoEnv, utils.EzPickle):
     If `terminate_when_unhealthy=False` is passed, the episode is ended only when 1000 timesteps are exceeded.
 
     ## Arguments
-    No additional arguments are currently supported in v2 and lower.
+    `gymnasium.make` takes additional arguments such as `xml_file`, `ctrl_cost_weight`, `reset_noise_scale`, etc.
 
     ```python
     import gymnasium as gym
-    env = gym.make('Humanoid-v4')
-    ```
-
-    v3 and v4 take `gymnasium.make` kwargs such as `xml_file`, `ctrl_cost_weight`, `reset_noise_scale`, etc.
-
-    ```python
-    import gymnasium as gym
-    env = gym.make('Humanoid-v4', ctrl_cost_weight=0.1, ....)
+    env = gym.make('Humanoid-v5', ctrl_cost_weight=0.1, ....)
     ```
 
     | Parameter                                    | Type      | Default          | Description                                                                                                                                                               |
@@ -336,7 +329,7 @@ class HumanoidEnv(MujocoEnv, utils.EzPickle):
         obs_shape += 130 * self._include_cinert_from_observation
         obs_shape += 78 * self._include_cvel_from_observation
         obs_shape += 17 * self._include_qfrc_actuator_from_observation
-        obs_shape += 78 * self._include_cfrc_ext_from_observation_from_observation
+        obs_shape += 78 * self._include_cfrc_ext_from_observation
         obs_shape += 2 * (not self._exclude_current_positions_from_observation)
 
         observation_space = Box(
@@ -365,7 +358,7 @@ class HumanoidEnv(MujocoEnv, utils.EzPickle):
 
     @property
     def contact_cost(self):
-        contact_forces = self.sim.data.cfrc_ext
+        contact_forces = self.data.cfrc_ext
         contact_cost = self._contact_cost_weight * np.sum(np.square(contact_forces))
         min_cost, max_cost = self._contact_cost_range
         contact_cost = np.clip(contact_cost, min_cost, max_cost)
@@ -406,10 +399,11 @@ class HumanoidEnv(MujocoEnv, utils.EzPickle):
             external_contact_forces = np.array([])
 
         # TODO remove after validation
-        assert (self.data.cinert[0].flat.copy == 0).all()
-        assert (self.data.cvel[0].flat.copy == 0).all()
-        assert (self.data.qfrc_actuator[:6].flat.copy == 0).all()
-        assert (self.data.cfrc_ext[0].flat.copy == 0).all()
+        #breakpoint()
+        assert (self.data.cinert[0].flat.copy() == 0).all()
+        assert (self.data.cvel[0].flat.copy() == 0).all()
+        assert (self.data.qfrc_actuator[:6].flat.copy()  == 0).all()
+        assert (self.data.cfrc_ext[0].flat.copy() == 0).all()
 
         if self._exclude_current_positions_from_observation:
             position = position[2:]
