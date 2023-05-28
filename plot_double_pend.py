@@ -8,7 +8,7 @@ returns_TD3_v4 = np.average(np.array([np.load('results/InvertedDoublePendulum_v4
 returns_TD3_v4_fix = np.average(np.array([np.load('results/InvertedDoublePendulum_v4_fixed_TD3/run_' + str(run) + '/evaluations.npz')['results'] for run in range(RUNS)]), axis=2)
 returns_TD3_v5 = np.average(np.array([np.load('results/InvertedDoublePendulum_v5_TD3/run_' + str(run) + '/evaluations.npz')['results'] for run in range(RUNS)]), axis=2)
 
-breakpoint()
+#breakpoint()
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
