@@ -1,7 +1,6 @@
 import gymnasium as gym
 import numpy as np
 from gymnasium.experimental.wrappers import RescaleActionV0
-import gymnasium.experimental.wrappers.YRescaleActionV0
 
 from stable_baselines3 import TD3
 from stable_baselines3 import PPO
@@ -20,12 +19,19 @@ EVAL_FREQ = 5000
 EVAL_ENVS = 20
 
 for run in range(0, RUNS):
-    env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), render_mode=None)
+    #env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    #eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    #env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    #eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/anybotics_anymal_b/scene.xml', healthy_z_range=(0.48, 0.68), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/anybotics_anymal_b/scene.xml', healthy_z_range=(0.48, 0.68), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+
     env = RescaleActionV0(env, min_action=-1, max_action=1)
-    eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), render_mode=None)
     eval_env = RescaleActionV0(eval_env, min_action=-1, max_action=1)
 
-    eval_path = 'results/cassie/run_' + str(run)
+    #eval_path = 'results/cassie/run_' + str(run)
+    eval_path = 'results/op3/run_' + str(run)
+    #3eval_path = 'results/anymal_b/run_' + str(run)
 
     eval_callback = EvalCallback(eval_env, seed=EVAL_SEED, best_model_save_path=eval_path, log_path=eval_path, n_eval_episodes=EVAL_ENVS, eval_freq=EVAL_FREQ, deterministic=True, render=False, verbose=True)
 
