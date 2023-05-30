@@ -26,17 +26,17 @@ for run in range(0, RUNS):
     #eval_env = gym.make('Humanoid-v4')
     #env = gym.wrappers.TimeLimit(humanoid_v4_fixed.HumanoidEnv(), max_episode_steps=1000)
     #eval_env = gym.wrappers.TimeLimit(humanoid_v4_fixed.HumanoidEnv(), max_episode_steps=1000)
-    env = gym.wrappers.TimeLimit(humanoid_v5.HumanoidEnv(), max_episode_steps=1000)
-    eval_env = gym.wrappers.TimeLimit(humanoid_v5.HumanoidEnv(), max_episode_steps=1000)
+    env = gym.wrappers.TimeLimit(humanoid_v5a.HumanoidEnv(), max_episode_steps=1000)
+    eval_env = gym.wrappers.TimeLimit(humanoid_v5a.HumanoidEnv(), max_episode_steps=1000)
 
     #eval_path = 'results/Humanoid_v4_PPO/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_fixed_reward_PPO/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_fixed_reward_on_eval_PPO/run_' + str(run)
-    eval_path = 'results/Humanoid_v5_PPO/run_' + str(run)
+    eval_path = 'results/Humanoid_v5s_PPO/run_' + str(run)
     #eval_path = 'results/Humanoid_v3_TD3/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_TD3/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_fixed_reward_TD3/run_' + str(run)
-    #eval_path = 'results/Humanoid_v5_TD3/run_' + str(run)
+    #eval_path = 'results/Humanoid_v5a_TD3/run_' + str(run)
 
     eval_callback = EvalCallback(eval_env, seed=EVAL_SEED, best_model_save_path=eval_path, log_path=eval_path, n_eval_episodes=EVAL_ENVS, eval_freq=EVAL_FREQ, deterministic=True, render=False, verbose=True)
 

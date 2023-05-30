@@ -15,13 +15,13 @@ EVAL_SEED = 1234
 EVAL_FREQ = 1000
 
 for run in range(0, RUNS):
-    #env = gym.make('Reacher-v4')
-    #eval_env = gym.make('Reacher-v4')
-    env = gym.wrappers.TimeLimit(reacher_v5.ReacherEnv(), max_episode_steps=50)
-    eval_env = gym.wrappers.TimeLimit(reacher_v5.ReacherEnv(), max_episode_steps=50)
+    env = gym.make('Reacher-v4')
+    eval_env = gym.make('Reacher-v4')
+    #env = gym.wrappers.TimeLimit(reacher_v5.ReacherEnv(), max_episode_steps=50)
+    #eval_env = gym.wrappers.TimeLimit(reacher_v5.ReacherEnv(), max_episode_steps=50)
 
-    #eval_path = 'results/reacher_v4_TD3/run_' + str(run)
-    eval_path = 'results/reacher_v5_TD3/run_' + str(run)
+    eval_path = 'results/reacher_v4_TD3/run_' + str(run)
+    #eval_path = 'results/reacher_v5_TD3/run_' + str(run)
     #eval_path = 'results/reacher_v4_PPO/run_' + str(run)
     #eval_path = 'results/reacher_v5_PPO/run_' + str(run)
 
