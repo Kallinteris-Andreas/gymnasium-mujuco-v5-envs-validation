@@ -11,20 +11,22 @@ from my_eval import EvalCallback
 
 RUNS = 10  # Number of Statistical Runs
 TOTAL_TIME_STEPS = 1_000_000
-ALGO = TD3
-#ALGO = PPO
+#ALGO = TD3
+ALGO = PPO
 EVAL_SEED = 1234
 EVAL_FREQ = 2500
 EVAL_ENVS = 20
 
-for run in range(8, RUNS):
+for run in range(0, RUNS):
     #env = gym.make('Hopper-v4')
     #eval_env = gym.make('Hopper-v4')
     env = gym.wrappers.TimeLimit(hopper_v5.HopperEnv(), max_episode_steps=1000)
     eval_env = gym.wrappers.TimeLimit(hopper_v5.HopperEnv(), max_episode_steps=1000)
 
     #eval_path = 'results/Hopper_v4_TD3/run_' + str(run)
-    eval_path = 'results/Hopper_v5_TD3/run_' + str(run)
+    #eval_path = 'results/Hopper_v5_TD3/run_' + str(run)
+    #eval_path = 'results/Hopper_v4_PPO/run_' + str(run)
+    eval_path = 'results/Hopper_v5_PPO/run_' + str(run)
 
     eval_callback = EvalCallback(eval_env, seed=EVAL_SEED, best_model_save_path=eval_path, log_path=eval_path, n_eval_episodes=EVAL_ENVS, eval_freq=EVAL_FREQ, deterministic=True, render=False, verbose=True)
 

@@ -18,7 +18,7 @@ EVAL_SEED = 1234
 EVAL_FREQ = 5000
 EVAL_ENVS = 20
 
-for run in range(8, RUNS):
+for run in range(0, RUNS):
     #env = gym.make('HumanoidStandup-v4')
     #eval_env = gym.make('HumanoidStandup-v4')
     env = gym.wrappers.TimeLimit(humanoidstandup_v5.HumanoidStandupEnv(), max_episode_steps=1000)
