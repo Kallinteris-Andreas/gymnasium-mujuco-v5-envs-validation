@@ -1,5 +1,6 @@
 import gymnasium as gym
 import numpy as np
+import copy
 from gymnasium.experimental.wrappers import RescaleActionV0
 
 from stable_baselines3 import TD3
@@ -11,7 +12,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from my_eval import EvalCallback
 
 RUNS = 1  # Number of Statistical Runs
-TOTAL_TIME_STEPS = 2_000_000
+TOTAL_TIME_STEPS = 4_000_000
 #ALGO = TD3
 ALGO = PPO
 EVAL_SEED = 1234
@@ -20,14 +21,10 @@ EVAL_ENVS = 20
 
 for run in range(0, RUNS):
     #env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-    #eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-    #env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-    #eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-    env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/anybotics_anymal_b/scene.xml', healthy_z_range=(0.48, 0.68), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-    eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/anybotics_anymal_b/scene.xml', healthy_z_range=(0.48, 0.68), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-
+    env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), include_cinert_in_observation=False, include_cvel_in_observation=False, include_qfrc_actuator_in_observation=False, include_cfrc_ext_in_observation=False, ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    #env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/anybotics_anymal_b/scene.xml', healthy_z_range=(0.48, 0.68), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
     env = RescaleActionV0(env, min_action=-1, max_action=1)
-    eval_env = RescaleActionV0(eval_env, min_action=-1, max_action=1)
+    eval_env = copy.deepcopy(env)
 
     #eval_path = 'results/cassie/run_' + str(run)
     eval_path = 'results/op3/run_' + str(run)

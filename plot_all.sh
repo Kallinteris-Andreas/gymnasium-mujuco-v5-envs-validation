@@ -4,3 +4,4 @@ python plot_humanoid.py
 python plot_humanoidstandup.py
 python plot_pend.py
 python plot_reacher.py
+python plot_hopper.py

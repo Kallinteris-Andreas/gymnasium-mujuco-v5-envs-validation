@@ -1,5 +1,6 @@
 import gymnasium as gym
 from envs import humanoid_v5
+from envs import humanoid_v5a
 from envs import humanoid_v4_fixed
 import numpy as np
 
@@ -26,13 +27,16 @@ for run in range(0, RUNS):
     #eval_env = gym.make('Humanoid-v4')
     #env = gym.wrappers.TimeLimit(humanoid_v4_fixed.HumanoidEnv(), max_episode_steps=1000)
     #eval_env = gym.wrappers.TimeLimit(humanoid_v4_fixed.HumanoidEnv(), max_episode_steps=1000)
-    env = gym.wrappers.TimeLimit(humanoid_v5a.HumanoidEnv(), max_episode_steps=1000)
-    eval_env = gym.wrappers.TimeLimit(humanoid_v5a.HumanoidEnv(), max_episode_steps=1000)
+    #env = gym.wrappers.TimeLimit(humanoid_v5a.HumanoidEnv(), max_episode_steps=1000)
+    #eval_env = gym.wrappers.TimeLimit(humanoid_v5a.HumanoidEnv(), max_episode_steps=1000)
+    env = gym.wrappers.TimeLimit(humanoid_v5.HumanoidEnv(), max_episode_steps=1000)
+    eval_env = gym.wrappers.TimeLimit(humanoid_v5.HumanoidEnv(), max_episode_steps=1000)
 
     #eval_path = 'results/Humanoid_v4_PPO/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_fixed_reward_PPO/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_fixed_reward_on_eval_PPO/run_' + str(run)
-    eval_path = 'results/Humanoid_v5s_PPO/run_' + str(run)
+    #eval_path = 'results/Humanoid_v5a_PPO/run_' + str(run)
+    eval_path = 'results/Humanoid_v5_PPO/run_' + str(run)
     #eval_path = 'results/Humanoid_v3_TD3/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_TD3/run_' + str(run)
     #eval_path = 'results/Humanoid_v4_fixed_reward_TD3/run_' + str(run)

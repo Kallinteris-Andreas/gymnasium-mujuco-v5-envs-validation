@@ -18,7 +18,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 #eval_env = RescaleActionV0(eval_env, min_action=-1, max_action=1)
 #model = PPO.load(path='/home/master-andreas/rl/project/results/cassie/run_0/best_model.zip', env=eval_env, device='cpu')
 
-eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), render_mode='human')
+eval_env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), include_cinert_in_observation=False, include_cvel_in_observation=False, include_qfrc_actuator_in_observation=False, include_cfrc_ext_in_observation=False, ctrl_cost_weight=0, contact_cost_weight=0, render_mode='human')
 eval_env = RescaleActionV0(eval_env, min_action=-1, max_action=1)
 model = PPO.load(path='/home/master-andreas/rl/project/results/op3/run_0/best_model.zip', env=eval_env, device='cpu')
 
@@ -38,8 +38,8 @@ eval_env = gym.make('Ant-v5', render_mode=None)
 #model = TD3.load(path='/home/master-andreas/rl/project/results/InvertedDoublePendulum_v4_fixed_TD3/run_0/best_model.zip', env=eval_env, device='cpu')
 #model = TD3.load(path='/home/master-andreas/rl/project/results/ant_v5_TD3/run_8/best_model.zip', env=eval_env, device='cpu')
 
-avg_return, std_return = evaluate_policy(model, eval_env, n_eval_episodes=1000)
-print(f"the average return is {avg_return}")
+#avg_return, std_return = evaluate_policy(model, eval_env, n_eval_episodes=1000)
+#print(f"the average return is {avg_return}")
 
 ##breakpoint()
 
