@@ -1,3 +1,5 @@
+# v4 with cfrc_ext cost included
+
 import numpy as np
 from gymnasium import utils
 from gymnasium.envs.mujoco import MujocoEnv

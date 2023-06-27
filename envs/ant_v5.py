@@ -1,4 +1,8 @@
+# v4 with cfrc_ext cost included & worldbody cfrc_ext exluded in observations & healthy reward fixed
+
 __credits__ = ["Kallinteris-Andreas"]
+
+from typing import Dict, Tuple, Union
 
 import numpy as np
 from gymnasium import utils
@@ -22,6 +26,7 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     torques on the eight hinges connecting the two body parts of each leg and the torso
     (nine body parts and eight hinges).
 
+
     ## Action Space
     The action space is a `Box(-1, 1, (8,), float32)`. An action represents the torques applied at the hinge joints.
 
@@ -35,6 +40,7 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     | 5   | Torque applied on the rotor between the front right two links     | -1          | 1           | angle_2 (front_right_leg)        | hinge | torque (N m) |
     | 6   | Torque applied on the rotor between the torso and back left hip   | -1          | 1           | hip_3 (back_leg)                 | hinge | torque (N m) |
     | 7   | Torque applied on the rotor between the back left two links       | -1          | 1           | angle_3 (back_leg)               | hinge | torque (N m) |
+
 
     ## Observation Space
     Observations consist of positional values of different body parts of the ant,
@@ -111,27 +117,36 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     DOFs expressed as quaternions. One can read more about free joints on the [Mujoco Documentation](https://mujoco.readthedocs.io/en/latest/XMLreference.html).
 
 
-    **Note:** Ant-v4 environment no longer has the following contact forces issue.
+    **Note:** Ant-v4+ environment no longer has the following contact forces issue.
     If using previous Humanoid versions from v4, there have been reported issues that using a Mujoco-Py version > 2.0 results
     in the contact forces always being 0. As such we recommend to use a Mujoco-Py version < 2.0
     when using the Ant environment if you would like to report results with contact forces (if
     contact forces are not used in your experiments, you can use version > 2.0).
 
+
     ## Rewards
     The reward consists of three parts:
-    - *healthy_reward*: Every timestep that the ant is healthy (see definition in section "Episode Termination"), it gets a reward of fixed value `healthy_reward`
-    - *forward_reward*: A reward of moving forward which is measured as
-    $\frac{dx}{dt} \times$ `forward_reward_weight`.
-    $dx$ is the displacement of the `main_body` (x-coordinate before action - x-coordinate after action)*.
-    $dt$ is the time between actions and is dependent on the `frame_skip` parameter (default is 5),
-    where the frametime is 0.01 - making the default *dt = 5 * 0.01 = 0.05*.
-    This reward would be positive if the ant moves forward (in positive x direction).
-    - *ctrl_cost*: A negative reward for penalising the ant if it takes actions
-    that are too large. It is measured as *`ctrl_cost_weight` * sum(action<sup>2</sup>)*
-    where *`ctr_cost_weight`* is a parameter set for the control and has a default value of 0.5.
-    - *contact_cost*: A negative reward for penalising the ant if the external contact
-    force is too large. It is calculated *`contact_cost_weight` * sum(clip(external contact
-    force to `contact_force_range`)<sup>2</sup>)*.
+    - *healthy_reward*:
+    Every timestep that the ant is healthy (see definition in section "Episode Termination"),
+    it gets a reward of fixed value `healthy_reward`.
+    - *forward_reward*:
+    A reward of moving forward,
+    this reward would be positive if the Ant moves forward (in the positive $x$ direction / in the right direction).
+    $w_{forward} \times \frac{dx}{dt}$, where
+    $dx$ is the displacement of the `main_body` ($x_{after-action} - x_{before-action}$),
+    $dt$ is the time between actions which is dependent on the `frame_skip` parameter (default is 5),
+    and `frametime` which is 0.01 - making the default $dt = 5 \times 0.01 = 0.05$,
+    $w_{forward}$ is the `forward_reward_weight` (default is $1$).
+    - *ctrl_cost*:
+    A negative reward for penalizing the Ant if it takes actions that are too large.
+    $w_{control} \times \\|action\\|_2^2$,
+    where $w_{control}$ is `ctrl_cost_weight` (default is $0.5$).
+    - *contact_cost*:
+    A negative reward for penalizing the Ant if the external contact forces are too large.
+    $w_{contact} \times \\|F_{contact}\\|_2^2$, where
+    $w_{contact}$ is `contact_cost_weight` (default is $5\times10^{-4}$),
+    $F_{contact}$ are the external contact forces clipped by `contact_force_range` (see `cfrc_ext` section on observation).
+
 
     The total reward returned is ***reward*** *=* *healthy_reward + forward_reward - ctrl_cost - contact_cost*.
 
@@ -139,6 +154,7 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     The total reward returned is ***reward*** *=* *healthy_reward + forward_reward - ctrl_cost*.
 
     In either case `info` will also contain the individual reward terms.
+
 
     ## Starting State
     All observations start in state
@@ -149,19 +165,18 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     to be slightly high, thereby indicating a standing up ant. The initial orientation
     is designed to make it face forward as well.
 
+
     ## Episode End
-    The ant is said to be unhealthy if any of the following happens:
+    #### Termination
+    If `terminate_when_unhealthy is True` (which is the default), the environment terminates when the Ant is unhealthy.
+    the Ant is unhealthy if any of the following happens:
 
     1. Any of the state space values is no longer finite
     2. The z-coordinate of the torso is **not** in the closed interval given by `healthy_z_range` (defaults to [0.2, 1.0])
 
-    If `terminate_when_unhealthy=True` is passed during construction (which is the default),
-    the episode ends when any of the following happens:
+    #### truncation
+    The maximum duration of an episode is 1000 timesteps.
 
-    1. Truncation: The episode duration reaches a 1000 timesteps
-    2. Termination: The ant is unhealthy
-
-    If `terminate_when_unhealthy=False` is passed, the episode is ended only when 1000 timesteps are exceeded.
 
     ## Arguments
     `gymnasium.make` takes additional arguments such as `xml_file`, `ctrl_cost_weight`, `reset_noise_scale`, etc.
@@ -177,8 +192,8 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     |`forward_reward_weight`                     | **float**  | `1`          | Weight for _forward_reward_ term (see section on reward)|
     |`ctrl_cost_weight`                          | **float**  | `0.5`        | Weight for _ctrl_cost_ term (see section on reward) |
     |`contact_cost_weight`                       | **float**  | `5e-4`       | Weight for _contact_cost_ term (see section on reward) |
-    |`healthy_reward`                            | **float**  | `1`          | Constant reward given if the ant is "healthy" after timestep |
-    |`main_body`                                 |**str|int** | `1`("torso") | Name or ID of the body, whose diplacement is used to calculate the *dx*/_forward_reward_ (usefull for custom MuJoCo models)|
+    |`healthy_reward`                            | **float**  | `1`          | Weight for _healthy_reward_ term (see section on reward) |
+    |`main_body`                                 |**str|int** | `1`("torso") | Name or ID of the body, whose diplacement is used to calculate the *dx*/_forward_reward_ (useful for custom MuJoCo models)|
     |`terminate_when_unhealthy`                  | **bool**   | `True`       | If true, issue a done signal if the z-coordinate of the torso is no longer in the `healthy_z_range` |
     |`healthy_z_range`                           | **tuple**  | `(0.2, 1)`   | The ant is considered healthy if the z-coordinate of the torso is in this range |
     |`contact_force_range`                       | **tuple**  | `(-1, 1)`    | Contact forces are clipped to this range in the computation of *contact_cost* |
@@ -195,22 +210,30 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     * v0: Initial versions release (1.0.0)
     """
 
+    metadata = {
+        "render_modes": [
+            "human",
+            "rgb_array",
+            "depth_array",
+        ],
+    }
+
     def __init__(
         self,
-        xml_file="ant.xml",
-        frame_skip=5,
-        default_camera_config=DEFAULT_CAMERA_CONFIG,
-        forward_reward_weight=1,
-        ctrl_cost_weight=0.5,
-        contact_cost_weight=5e-4,
-        healthy_reward=1.0,
-        main_body="torso",
-        terminate_when_unhealthy=True,
-        healthy_z_range=(0.2, 1.0),
-        contact_force_range=(-1.0, 1.0),
-        reset_noise_scale=0.1,
-        exclude_current_positions_from_observation=True,
-        include_cfrc_ext_in_observation=True,
+        xml_file: str = "ant.xml",
+        frame_skip: int = 5,
+        default_camera_config: Dict = DEFAULT_CAMERA_CONFIG,
+        forward_reward_weight: float = 1,
+        ctrl_cost_weight: float = 0.5,
+        contact_cost_weight: float = 5e-4,
+        healthy_reward: float = 1.0,
+        main_body: Union[int, str] = 1,
+        terminate_when_unhealthy: bool = True,
+        healthy_z_range: Tuple[float, float] = (0.2, 1.0),
+        contact_force_range: Tuple[float, float] = (-1.0, 1.0),
+        reset_noise_scale: float = 0.1,
+        exclude_current_positions_from_observation: bool = True,
+        include_cfrc_ext_in_observation: bool = True,
         **kwargs
     ):
         utils.EzPickle.__init__(
@@ -251,15 +274,6 @@ class AntEnv(MujocoEnv, utils.EzPickle):
         )
         self._include_cfrc_ext_in_observation = include_cfrc_ext_in_observation
 
-        self.metadata = {
-            "render_modes": [
-                "human",
-                "rgb_array",
-                "depth_array",
-            ],
-            # "render_fps": 100 / frame_skip,  # TODO compute `render_fps` in MujocoEnv
-        }
-
         MujocoEnv.__init__(
             self,
             xml_file,
@@ -269,6 +283,15 @@ class AntEnv(MujocoEnv, utils.EzPickle):
             **kwargs
         )
 
+        self.metadata = {
+            "render_modes": [
+                "human",
+                "rgb_array",
+                "depth_array",
+            ],
+            "render_fps": int(np.round(1.0 / self.dt)),
+        }
+
         obs_size = self.data.qpos.size + self.data.qvel.size
         obs_size -= 2 * exclude_current_positions_from_observation
         obs_size += self.data.cfrc_ext[1:].size * include_cfrc_ext_in_observation
@@ -277,14 +300,11 @@ class AntEnv(MujocoEnv, utils.EzPickle):
             low=-np.inf, high=np.inf, shape=(obs_size,), dtype=np.float64
         )
 
-        self.metadata["observation_structure"] = {
+        self.observation_structure = {
             "skipped_qpos": 2 * exclude_current_positions_from_observation,
             "qpos": self.data.qpos.size
             - 2 * exclude_current_positions_from_observation,
             "qvel": self.data.qvel.size,
-            "cinert": 0,
-            "cvel": 0,
-            "qfrc_actuator": 0,
             "cfrc_ext": self.data.cfrc_ext[1:].size * include_cfrc_ext_in_observation,
         }
 
@@ -321,15 +341,17 @@ class AntEnv(MujocoEnv, utils.EzPickle):
     def terminated(self):
         terminated = (not self.is_healthy) and self._terminate_when_unhealthy
         # TODO remove after validation
-        assert terminated == (not self.is_healthy if self._terminate_when_unhealthy else False)
+        assert terminated == (
+            not self.is_healthy if self._terminate_when_unhealthy else False
+        )
         return terminated
 
     def step(self, action):
-        xy_position_before = self.data.body(self._main_body).xpos[:2]
+        xy_position_before = self.data.body(self._main_body).xpos[:2].copy()
         # TODO remove after validation
         assert (xy_position_before == self.get_body_com("torso")[:2].copy()).all()
         self.do_simulation(action, self.frame_skip)
-        xy_position_after = self.data.body(self._main_body).xpos[:2]
+        xy_position_after = self.data.body(self._main_body).xpos[:2].copy()
         # TODO remove after validation
         assert (xy_position_after == self.get_body_com("torso")[:2].copy()).all()
 
@@ -354,7 +376,7 @@ class AntEnv(MujocoEnv, utils.EzPickle):
             "reward_survive": healthy_reward,
             "x_position": self.data.qpos[0],
             "y_position": self.data.qpos[1],
-            "distance_from_origin": np.linalg.norm(xy_position_after, ord=2),
+            "distance_from_origin": np.linalg.norm(self.data.qpos[0:2], ord=2),
             "x_velocity": x_velocity,
             "y_velocity": y_velocity,
         }
@@ -398,3 +420,10 @@ class AntEnv(MujocoEnv, utils.EzPickle):
         observation = self._get_obs()
 
         return observation
+
+    def _get_reset_info(self):
+        return {
+            "x_position": self.data.qpos[0],
+            "y_position": self.data.qpos[1],
+            "distance_from_origin": np.linalg.norm(self.data.qpos[0:2], ord=2),
+        }
