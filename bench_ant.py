@@ -6,17 +6,20 @@ import numpy as np
 import copy
 import os
 
+import stable_baselines3
 from stable_baselines3 import TD3, PPO, A2C, SAC
 from stable_baselines3.common.logger import configure
 from stable_baselines3.common.noise import NormalActionNoise
 #from stable_baselines3.common.callbacks import EvalCallback
 from my_eval import EvalCallback
 
+assert stable_baselines3.__version__ == '2.0.0a5'
+
 RUNS = 10  # Number of Statistical Runs
 TOTAL_TIME_STEPS = 2_000_000
-#ALGO = TD3
+ALGO = TD3
 #ALGO = PPO
-ALGO = SAC
+#ALGO = SAC
 #ALGO = A2C  # Note: sucks for Ant
 ALGO_NAME = str(ALGO).split('.')[-1][:-2]
 EVAL_SEED = 1234
@@ -36,7 +39,7 @@ for run in range(0, RUNS):
     #env = gym.wrappers.TimeLimit(ant_v5a.AntEnv(healthy_reward=0.0), max_episode_steps=1000)
     #env = gym.wrappers.TimeLimit(ant_v5.AntEnv(healthy_reward=0.1), max_episode_steps=1000)
     #env = gym.wrappers.TimeLimit(ant_v5.AntEnv(healthy_reward=0.0), max_episode_steps=1000)
-    #env = gym.wrappers.TimeLimit(ant_v5.AntEnv(include_cfrc_ext_in_observation=False), max_episode_steps=1000)
+    env = gym.wrappers.TimeLimit(ant_v5.AntEnv(include_cfrc_ext_in_observation=False), max_episode_steps=1000)
     #env = gym.wrappers.TimeLimit(ant_v5.AntEnv(), max_episode_steps=1000)
     eval_env = copy.deepcopy(env)
 
@@ -47,7 +50,7 @@ for run in range(0, RUNS):
     #eval_path = f'results/ant_v5_policy_std_0.1_{ALGO_NAME}/run_' + str(run)
     #eval_path = f'results/ant_v5_policy_std_0.25_{ALGO_NAME}/run_' + str(run)
     #eval_path = f'results/ant_v5_policy_std_1_{ALGO_NAME}/run_' + str(run)
-    #eval_path = f'results/ant_v5_without_ctn_{ALGO_NAME}/run_' + str(run)
+    eval_path = f'results/ant_v5_without_ctn_{ALGO_NAME}/run_' + str(run)
     #eval_path = f'results/ant_v5_hr_0.1_{ALGO_NAME}/run_' + str(run)
     #eval_path = f'results/ant_v5_hr_0_{ALGO_NAME}/run_' + str(run)
     #eval_path = f'results/ant_v5a_hr_0_{ALGO_NAME}/run_' + str(run)
