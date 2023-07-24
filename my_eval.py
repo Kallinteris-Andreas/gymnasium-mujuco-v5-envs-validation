@@ -1,4 +1,5 @@
 from stable_baselines3.common.callbacks import BaseCallback, EventCallback
+import stable_baselines3
 from typing import Any, Callable, Dict, List, Optional, Union, Tuple
 
 import gymnasium as gym
@@ -7,6 +8,9 @@ import numpy as np
 from stable_baselines3.common.vec_env import DummyVecEnv, VecEnv, sync_envs_normalization, VecMonitor, is_vecenv_wrapped
 import os
 import warnings
+
+
+assert stable_baselines3.__version__ == '2.0.0a5'
 
 class EvalCallback(EventCallback):
     """

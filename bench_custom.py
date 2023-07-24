@@ -18,7 +18,7 @@ from my_eval import EvalCallback
 assert stable_baselines3.__version__ == '2.0.0a5'
 
 
-RUNS = 1  # Number of Statistical Runs
+RUNS = 10  # Number of Statistical Runs
 TOTAL_TIME_STEPS = 2_000_000
 parser = argparse.ArgumentParser()
 parser.add_argument("--algo")
@@ -45,18 +45,33 @@ n_actions = 8
 #action_noise = NormalActionNoise(mean=np.zeros(n_actions), sigma=1.00 * np.ones(n_actions))
 print(f"Using aglorithm: {ALGO_NAME}")
 
-for run in range(0, RUNS):
+for run in range(2, RUNS):
     #env = gym.make('Humanoid-v5', xml_file='/home/master-andreas/casie-scene.xml', healthy_z_range=(1.0, 2.1), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    #eval_path = 'results/cassie/run_' + str(run)
     #env = gym.make('Humanoid-v5', xml_file='~/mujoco_menagerie/robotis_op3/scene.xml', healthy_z_range=(0.275, 0.5), include_cinert_in_observation=False, include_cvel_in_observation=False, include_qfrc_actuator_in_observation=False, include_cfrc_ext_in_observation=False, ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
+    #eval_path = f'results/op3/{ALGO_NAME}/run_' + str(run)
     #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/anybotics_anymal_b/scene.xml', include_cfrc_ext_in_observation=False, healthy_z_range=(0.48, 0.68), ctrl_cost_weight=0, contact_cost_weight=0, render_mode=None)
-    env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/anymal_b/{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.05, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_005_z0295_{ALGO_NAME}/run_" + str(run)
+    env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=True, ctrl_cost_weight=0.05, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=None)
+    eval_path = f"results/go1/with_ctn_ctrl_005_z0295_{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.01, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_001_{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.001, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_0001_{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_0_{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.05, healthy_z_range=(0.320, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_005_z_032_{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.0, healthy_z_range=(0.345, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_0_z_0345{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.05, healthy_z_range=(0.345, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/without_ctn_ctrl_005_z_0345{ALGO_NAME}/run_" + str(run)
+    #env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=True, ctrl_cost_weight=0.05, healthy_z_range=(0.345, 1), frame_skip=25, render_mode=None)
+    #eval_path = f"results/go1/with_ctn_ctrl_005-_z_0345{ALGO_NAME}/run_" + str(run)
     env = RescaleActionV0(env, min_action=-1, max_action=1)
     eval_env = copy.deepcopy(env)
-
-    #eval_path = 'results/cassie/run_' + str(run)
-    eval_path = f'results/op3/{ALGO_NAME}/run_' + str(run)
-    #eval_path = f"results/anymal_b/{ALGO_NAME}/run_" + str(run)
-    #eval_path = f"results/unitree_go1/{ALGO_NAME}/run_" + str(run)
 
     assert not os.path.exists(eval_path)
 

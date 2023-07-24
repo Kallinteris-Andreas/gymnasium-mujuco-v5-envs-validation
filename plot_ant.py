@@ -40,7 +40,7 @@ returns_SAC_v5_w_ctn_len = np.average(np.array([np.load('results/ant_v5_SAC/run_
 returns_SAC_v5_wo_ctn_len = np.average(np.array([np.load('results/ant_v5_without_ctn_SAC/run_' + str(run) + '/evaluations.npz')['ep_lengths'] for run in range(RUNS)]), axis=2)
 
 
-#breakpoint()
+breakpoint()
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
