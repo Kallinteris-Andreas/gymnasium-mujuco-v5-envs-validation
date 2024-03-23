@@ -12,8 +12,7 @@ returns_SAC_w_ctn_len = np.average(np.array([np.load('results/go1/with_ctn_ctrl_
 returns_SAC_wo_ctn = np.average(np.array([np.load('results/go1/without_ctn_ctrl_005_z0295_SAC/run_' + str(run) + '/evaluations.npz')['results'] for run in range(RUNS)]), axis=2)
 returns_SAC_wo_ctn_len = np.average(np.array([np.load('results/go1/without_ctn_ctrl_005_z0295_SAC/run_' + str(run) + '/evaluations.npz')['ep_lengths'] for run in range(RUNS)]), axis=2)
 
-
-#breakpoint()
+breakpoint()
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)

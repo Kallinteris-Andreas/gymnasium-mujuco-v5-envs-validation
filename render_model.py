@@ -12,6 +12,7 @@ from stable_baselines3.common.logger import configure
 from stable_baselines3.common.evaluation import evaluate_policy
 
 
+#RENDER_MODE="rgb_array"
 RENDER_MODE="human"
 
 
@@ -32,14 +33,16 @@ RENDER_MODE="human"
 #model = SAC.load(path='/home/master-andreas/rl/project/results/anymal_b/SAC/run_0/best_model.zip', env=eval_env, device='cpu')
 # GO1
 #eval_env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, healthy_z_range=(0.345, 1), ctrl_cost_weight=0.01, render_mode=RENDER_MODE, width=1920, height=1080, camera_id=0)
-eval_env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.05, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=RENDER_MODE, width=1920, height=1080, camera_id=0)
+#eval_env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.05, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=RENDER_MODE, width=1920, height=1080, camera_id=0)
+eval_env = gym.make('Ant-v5', xml_file='~/mujoco_menagerie/unitree_go1/scene.xml', include_cfrc_ext_in_observation=False, ctrl_cost_weight=0.05, healthy_z_range=(0.295, 1), frame_skip=25, render_mode=RENDER_MODE, camera_id=0)
 eval_env = RescaleActionV0(eval_env, min_action=-1, max_action=1)
 #model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_005_SAC/run_9/best_model.zip', env=eval_env, device='cpu')
 #model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_001_SAC/run_5/best_model.zip', env=eval_env, device='cpu')
 #model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_0001_SAC/run_0/best_model.zip', env=eval_env, device='cpu')
 #model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_0_SAC/run_0/best_model.zip', env=eval_env, device='cpu')
 #model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_005_z_032_SAC/run_3/best_model.zip', env=eval_env, device='cpu')
-model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_005_z_0345SAC/run_0/best_model.zip', env=eval_env, device='cpu')
+#model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_005_z_0345SAC/run_0/best_model.zip', env=eval_env, device='cpu')
+model = SAC.load(path='/home/master-andreas/rl/project/results/go1/without_ctn_ctrl_005_z0295_SAC/run_6/best_model.zip', env=eval_env, device='cpu') # Best Policy
 
 #eval_env = gym.make('Ant-v5', render_mode='human')
 #model = TD3.load(path='/home/master-andreas/rl/project/results/ant_v5_TD3/run_8/best_model.zip', env=eval_env, device='cpu')
